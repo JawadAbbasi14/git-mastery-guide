@@ -1,126 +1,72 @@
-⚙️ GitHub Actions - Basics
-GitHub Actions is used to automate your Git workflows.
-This means that when you push or create a pull request, automatic tasks like testing, deployment, or notifications can be triggered — without you having to do anything manually.
+⚙️ GitHub Actions - Buniyadi Baatain
+GitHub Actions tumhare Git workflows ko automate karta hai.
+Iska matlab hai jab tum code push karo ya pull request banao, to testing, deployment, ya notifications jese kaam khud-ba-khud ho jayenge — bina tumhare kuch kiye.
 
-🧱 Basic Structure of GitHub Actions
-GitHub Actions are defined in YAML files, which are stored in the .github/workflows/ folder. Each YAML file represents a separate workflow.
+🧱 GitHub Actions Ka Dhaancha
+GitHub Actions ki files YAML format mein .github/workflows/ folder mein hoti hain. Har file ek alag workflow hai.
 
-name: My First GitHub Action # The name of the workflow, visible in the GitHub UI
+name: Meri Pehli GitHub Action # Workflow ka naam
 
-on: push # This defines when the workflow will run (the trigger)
+on: push # Ye batata hai kab workflow chalega (trigger)
 
-jobs: # This is a collection of one or more jobs
-  build: # The ID of the job (should be unique)
-    runs-on: ubuntu-latest # This specifies which operating system the job will run on
+jobs: # Ye jobs ka collection hai
+  build: # Job ka ID
+    runs-on: ubuntu-latest # Kis OS par job chalega
 
-    steps: # These are the individual commands or actions that will run within the job
-      - name: Checkout code # Name of the step
-        uses: actions/checkout@v4 # This is a pre-built action that checks out the repository
+    steps: # Job ke andar chalne wale commands ya actions
+      - name: Code checkout karo # Step ka naam
+        uses: actions/checkout@v4 # Repository ko checkout karne wala action
 
-      - name: Run a simple script # Another step
-        run: echo "Hello GitHub Actions!" # This command will execute on the runner
+      - name: Ek script chalao # Simple command
+        run: echo "Hello GitHub Actions!"
 
-      - name: Install dependencies # Example of installing dependencies
-        run: npm install # Or `pip install -r requirements.txt` if it's Python
+      - name: Dependencies install karo # Dependencies install karna
+        run: npm install # Ya `pip install -r requirements.txt`
 
-      - name: Run tests # Example of running tests
-        run: npm test # Or `pytest`
+      - name: Tests chalao # Tests run karna
+        run: npm test # Ya `pytest`
 
-Key Components Explained
-name: The name of your workflow. This is what you'll see in the GitHub UI.
+Aham Hissay (Key Components)
+name: Workflow ka naam.
 
-on: This is the trigger. It specifies when the workflow will run. Common triggers include:
+on: Workflow kab trigger hoga (e.g., push, pull_request, schedule).
 
-push: When code is pushed to the repository.
+jobs: Ek workflow mein ek ya zyada jobs ho sakte hain.
 
-pull_request: When a pull request is created or updated.
+runs-on: Virtual environment (e.g., ubuntu-latest).
 
-workflow_dispatch: To run the workflow manually.
+steps: Har job ke andar commands ya actions ki list.
 
-schedule: To run at a specific time (uses cron syntax).
+name: Step ka naam.
 
-jobs: A workflow can have one or more jobs. Each job is independent or can depend on other jobs.
+uses: Pre-built GitHub Action use karna.
 
-runs-on: This specifies the virtual environment where your job will execute. Common options are ubuntu-latest, windows-latest, macos-latest.
+run: Command-line commands chalana.
 
-steps: Each job contains steps. Steps execute in a sequence. Each step can be a command or an action.
-
-name: The name of the step.
-
-uses: This uses a pre-built GitHub Action (like actions/checkout@v4). These are reusable components.
-
-run: This executes command-line commands.
-
-🚀 Common Use Cases
-GitHub Actions can be used to automate a wide variety of tasks:
+🚀 Aam Istemaal (Common Use Cases)
+GitHub Actions se bahut saare kaam automate ho sakte hain:
 
 Continuous Integration (CI) - Testing:
 
-Automatically run tests whenever code is pushed.
+Code push hone par automatic tests chalana.
 
-Perform code quality checks (linters).
-
-Verify the build process.
-
-Example:
-
-on: [push, pull_request]
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-    - run: npm install
-    - run: npm test
+Code quality check karna.
 
 Continuous Deployment (CD) - Deployment:
 
-Automatically deploy code after it's merged (e.g., to Netlify, Vercel, AWS).
-
-Example (simplified):
-
-on:
-  push:
-    branches:
-      - main
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Deploy to Production
-      run: |
-        echo "Deploying application..."
-        # Add your deployment commands here (e.g., rsync, ssh commands)
+Code merge hone ke baad automatic deployment karna.
 
 Notifications:
 
-Send notifications to Slack or email if a build fails.
+Build fail hone par Slack ya email par notification bhejna.
 
-Example:
+✨ Behtareen Tareeqe (Best Practices)
+Secrets Use Karo: Sensitive information (API keys) ko GitHub Secrets mein rakho, code mein hardcode mat karo.
 
-on: [push]
-jobs:
-  notify:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Send Slack Notification
-      uses: rtCamp/action-slack-notify@v2
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
-        SLACK_MESSAGE: 'Build status: ${{ job.status }}'
+Workflow Reusability: Common steps ko reusable workflows mein badlo.
 
-✨ Pro Tips & Best Practices
-Use Secrets: Never hardcode sensitive information (like API keys, passwords) directly in your code. Store them in GitHub Secrets and access them using the secrets context (${{ secrets.MY_SECRET_KEY }}).
+Version Pinning: Actions ke specific version ko use karo (@v4).
 
-Workflow Reusability: If you have common steps that are used across multiple workflows, convert them into reusable workflows.
+Small & Focused Workflows: Workflows ko chota aur ek hi kaam par focus rakho.
 
-Version Pinning: Always pin to a specific version of actions (e.g., actions/checkout@v4 instead of actions/checkout). This ensures consistency.
-
-Small & Focused Workflows: Keep your workflows small and focused. Each workflow should concentrate on a single main task.
-
-Error Handling: Add proper error handling within your steps to manage failures gracefully.
+Error Handling: Failures ko manage karne ke liye steps mein error handling add karo.
